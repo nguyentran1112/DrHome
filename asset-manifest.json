@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/nguyentran1112/drhome/static/css/main.bfbcf6c8.css",
-    "main.js": "/nguyentran1112/drhome/static/js/main.6379a612.js",
-    "static/js/787.47840d9a.chunk.js": "/nguyentran1112/drhome/static/js/787.47840d9a.chunk.js",
-    "index.html": "/nguyentran1112/drhome/index.html",
-    "main.bfbcf6c8.css.map": "/nguyentran1112/drhome/static/css/main.bfbcf6c8.css.map",
-    "main.6379a612.js.map": "/nguyentran1112/drhome/static/js/main.6379a612.js.map",
-    "787.47840d9a.chunk.js.map": "/nguyentran1112/drhome/static/js/787.47840d9a.chunk.js.map"
+    "main.css": "/nguyentran1112/DrHome/static/css/main.bfbcf6c8.css",
+    "main.js": "/nguyentran1112/DrHome/static/js/main.8bcadd65.js",
+    "static/js/787.47840d9a.chunk.js": "/nguyentran1112/DrHome/static/js/787.47840d9a.chunk.js",
+    "index.html": "/nguyentran1112/DrHome/index.html",
+    "main.bfbcf6c8.css.map": "/nguyentran1112/DrHome/static/css/main.bfbcf6c8.css.map",
+    "main.8bcadd65.js.map": "/nguyentran1112/DrHome/static/js/main.8bcadd65.js.map",
+    "787.47840d9a.chunk.js.map": "/nguyentran1112/DrHome/static/js/787.47840d9a.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.bfbcf6c8.css",
-    "static/js/main.6379a612.js"
+    "static/js/main.8bcadd65.js"
   ]
 }
