@@ -187,7 +187,7 @@ function AppWeb() {
         })
         .catch((err) => console.log("error", err));
     }, 2000);
-  }, []);
+  }, [state.auto]);
   React.useEffect(() => {
     setInterval(() => {
       axios
@@ -199,7 +199,7 @@ function AppWeb() {
         })
         .catch((err) => console.log("error", err));
     }, 1000);
-  }, []);
+  }, [state.auto]);
   React.useEffect(() => {
     setInterval(() => {
       axios
@@ -211,7 +211,7 @@ function AppWeb() {
         })
         .catch((err) => console.log("error", err));
     }, 1000);
-  }, []);
+  }, [state.auto]);
   React.useEffect(() => {
     setInterval(() => {
       axios
@@ -224,7 +224,7 @@ function AppWeb() {
         })
         .catch((err) => console.log("error", err));
     }, 1000);
-  }, []);
+  }, [state.auto]);
 
 
   return (

@@ -45,9 +45,19 @@ function AppTabMob() {
   const [humidity, setHumidity] = React.useState(0);
   const [dateTemperature, setDateTemperature] = React.useState(0);
   const [datehumidity, setDateHumidity] = React.useState(0);
+  const [led, setLed] = React.useState(0);
+  const [buzzer, setBuzzer] = React.useState(0);
+  const [relay, setRelay] = React.useState(0);
+  const [auto, setAuto] = React.useState(0);
 
   //MQTT
-
+  const check = (condition1, condition2, condition3) => {
+    if (condition1 == true || (condition2 == 1 && condition3 == true)) {
+      return true;
+    } else {
+      return false;
+    }
+  };
   React.useEffect(() => {
     if (state.auto) {
       setState({ ...state, led: false, buzzer: false, relay: false });
@@ -159,6 +169,55 @@ function AppTabMob() {
         .catch((err) => console.log("error", err));
     }, 2000);
   }, []);
+  React.useEffect(() => {
+    setInterval(() => {
+      axios
+        .get(
+          `https://api.thingspeak.com/channels/${channelIdAuto}/fields/1/last.json?api_key=${readApiKeyAuto}`
+        )
+        .then((response) => {
+          setAuto(response.data.field1);
+        })
+        .catch((err) => console.log("error", err));
+    }, 2000);
+  }, [state.auto]);
+  React.useEffect(() => {
+    setInterval(() => {
+      axios
+        .get(
+          `https://api.thingspeak.com/channels/${channelIdRelay}/fields/1/last.json?api_key=${readApiKeyRelay}`
+        )
+        .then((response) => {
+          setRelay(response.data.field1);
+        })
+        .catch((err) => console.log("error", err));
+    }, 1000);
+  }, [state.auto]);
+  React.useEffect(() => {
+    setInterval(() => {
+      axios
+        .get(
+          `https://api.thingspeak.com/channels/${channelIdLed}/fields/1/last.json?api_key=${readApiKeyLed}`
+        )
+        .then((response) => {
+          setLed(response.data.field1);
+        })
+        .catch((err) => console.log("error", err));
+    }, 1000);
+  }, [state.auto]);
+  React.useEffect(() => {
+    setInterval(() => {
+      axios
+        .get(
+          `https://api.thingspeak.com/channels/${channelIdBuzzer}/fields/1/last.json?api_key=${readApiKeyBuzzer}`
+        )
+        .then((response) => {
+          setBuzzer(response.data.field1);
+          console.log("success", response.data.field1);
+        })
+        .catch((err) => console.log("error", err));
+    }, 1000);
+  }, [state.auto]);
 
   return (
     <div className="App">
@@ -298,11 +357,16 @@ function AppTabMob() {
               >
                 <div
                   style={{
-                    backgroundColor: state.relay ? "#ED6C02" : "#222527",
+                    //backgroundColor: state.relay ? "#ED6C02" : "#222527",
+                    backgroundColor: check(state.relay,relay,state.auto) ? "#ED6C02" : "#222527",
                     borderRadius: "50%",
                   }}
                 >
-                  <img width={80} height={80} src="https://img.icons8.com/color/96/000000/azure-relay-hybrid-connection.png" />
+                  <img
+                    width={80}
+                    height={80}
+                    src="https://img.icons8.com/color/96/000000/azure-relay-hybrid-connection.png"
+                  />
                 </div>
               </Box>
             </Grid>
@@ -328,7 +392,8 @@ function AppTabMob() {
                 }}
               >
                 <LightbulbIcon
-                  color={state.led ? "warning" : "disabled"}
+                  //color={state.led ? "warning" : "disabled"}
+                  color={check(state.led,led,state.auto) ? "warning" : "disabled"}
                   style={{ width: "80px", height: "80px" }}
                 />
               </Box>
@@ -355,8 +420,9 @@ function AppTabMob() {
                 }}
               >
                 <VolumeUpIcon
-                  color={state.buzzer ? "warning" : "disabled"}
+                  //color={state.buzzer ? "warning" : "disabled"}
                   style={{ width: "80px", height: "80px" }}
+                  color={check(state.buzzer,buzzer,state.auto) ? "warning" : "disabled"}
                 ></VolumeUpIcon>
               </Box>
             </Grid>
