@@ -2,6 +2,7 @@
   "name": "drhome",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://github.com/nguyentran1112/DrHome",
   "dependencies": {
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
@@ -11,6 +12,7 @@
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
     "axios": "^1.1.2",
+    "gh-pages": "^4.0.0",
     "moment": "^2.29.4",
     "mqtt": "^4.3.7",
     "paho-mqtt": "^1.1.0",
@@ -24,6 +26,8 @@
     "web-vitals": "^2.1.0"
   },
   "scripts": {
+    "predeploy": "npm run build", 
+    "deploy": "gh-pages -d build", 
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
