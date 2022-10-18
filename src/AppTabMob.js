@@ -58,11 +58,95 @@ function AppTabMob() {
       return false;
     }
   };
+  let today = new Date();
+  let hours = (today.getHours() < 10 ? '0' : '') + today.getHours();
+  const checkBuzzer = (auto1, auto2, condition1, condition2) => {
+    if ((auto1 == 1 && auto2)||auto2) {
+      if (condition1 > 37) {
+        return true;
+      } 
+      else if (condition1 < 31) {
+        return false;
+      }
+      else {
+        return true;
+      }
+    } 
+    else {
+      if (condition2) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  };
+  const checkLed = (auto1, auto2, condition1, condition2) => {
+    if ((auto1 == 1 && auto2)||auto2) {
+      if ((condition1 <= 18) & (condition1 <= 22)) {
+        return true;
+      } 
+      else {
+        return false;
+      }
+    } 
+    else {
+      if (condition2) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+
+  const checkRelay = (auto1, auto2, condition1, condition2) => {
+    if ((auto1 == 1 && auto2)||auto2) {
+      if (condition1 > 90) {
+        return true;
+      } 
+      else if (condition1 < 60) {
+        return false;
+      }
+      else {
+        return true;
+      }
+    } 
+    else {
+      if (condition2) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
   React.useEffect(() => {
     if (state.auto) {
       setState({ ...state, led: false, buzzer: false, relay: false });
       axios({
         url: `https://api.thingspeak.com/update?api_key=${writeApiKeyAuto}&field1=1`,
+        method: "POST",
+        headers: {
+          "Content-type": "application/x-www-form-urlencoded",
+        },
+      });
+      //relay
+      axios({
+        url: `https://api.thingspeak.com/update?api_key=${writeApiKeyRelay}&field1=0`,
+        method: "POST",
+        headers: {
+          "Content-type": "application/x-www-form-urlencoded",
+        },
+      });
+      //led
+      axios({
+        url: `https://api.thingspeak.com/update?api_key=${writeApiKeyLed}&field1=0`,
+        method: "POST",
+        headers: {
+          "Content-type": "application/x-www-form-urlencoded",
+        },
+      });
+      //buzzer
+      axios({
+        url: `https://api.thingspeak.com/update?api_key=${writeApiKeyBuzzer}&field1=0`,
         method: "POST",
         headers: {
           "Content-type": "application/x-www-form-urlencoded",
@@ -358,7 +442,9 @@ function AppTabMob() {
                 <div
                   style={{
                     //backgroundColor: state.relay ? "#ED6C02" : "#222527",
-                    backgroundColor: check(state.relay,relay,state.auto) ? "#ED6C02" : "#222527",
+                    backgroundColor: checkRelay(auto,state.auto, humidity, state.relay)
+                      ? "#ED6C02"
+                      : "#222527",
                     borderRadius: "50%",
                   }}
                 >
@@ -393,7 +479,9 @@ function AppTabMob() {
               >
                 <LightbulbIcon
                   //color={state.led ? "warning" : "disabled"}
-                  color={check(state.led,led,state.auto) ? "warning" : "disabled"}
+                  color={
+                    checkLed(auto, state.auto, hours, state.led) ? "warning" : "disabled"
+                  }
                   style={{ width: "80px", height: "80px" }}
                 />
               </Box>
@@ -422,7 +510,11 @@ function AppTabMob() {
                 <VolumeUpIcon
                   //color={state.buzzer ? "warning" : "disabled"}
                   style={{ width: "80px", height: "80px" }}
-                  color={check(state.buzzer,buzzer,state.auto) ? "warning" : "disabled"}
+                  color={
+                    checkBuzzer(auto, state.auto, temperature, state.buzzer)
+                      ? "warning"
+                      : "disabled"
+                  }
                 ></VolumeUpIcon>
               </Box>
             </Grid>

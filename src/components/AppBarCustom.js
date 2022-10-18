@@ -37,7 +37,7 @@ export default function AppBarCustom() {
           {appBarLabel('enableColorOnDark')}
         </AppBar> */}
         <AppBar position="static" color="primary">
-          {appBarLabel('Nhóm 1')}
+          {appBarLabel('Nhóm 2 TT3')}
         </AppBar>
       </ThemeProvider>
     </Stack>

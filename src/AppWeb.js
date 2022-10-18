@@ -15,7 +15,6 @@ import FormLabel from "@mui/material/FormLabel";
 import FormControl from "@mui/material/FormControl";
 import FormHelperText from "@mui/material/FormHelperText";
 function AppWeb() {
-
   const channelIdMain = "1882453";
   const readApiKeyMain = "ZJHZYWSDJWN6TCYP%22";
   const writeApiKeyMain = "OY65HQC1GPKPYQIU";
@@ -54,14 +53,71 @@ function AppWeb() {
   console.log(buzzer);
 
   const check = (condition1, condition2, condition3) => {
-    if(condition1 == true || (condition2 == 1)&&(condition3 == true)) {
+    if (condition1 == true || (condition2 == 1 && condition3 == true)) {
       return true;
+    } else {
+      return false;
     }
+  };
+  let today = new Date();
+  let hours = (today.getHours() < 10 ? '0' : '') + today.getHours();
+  const checkBuzzer = (auto1, auto2, condition1, condition2) => {
+    if ((auto1 == 1 && auto2)||auto2) {
+      if (condition1 > 37) {
+        return true;
+      } 
+      else if (condition1 < 31) {
+        return false;
+      }
+      else {
+        return true;
+      }
+    } 
     else {
-      return false
+      if (condition2) {
+        return true;
+      } else {
+        return false;
+      }
     }
-    
+  };
+  const checkLed = (auto1, auto2, condition1, condition2) => {
+    if ((auto1 == 1 && auto2)||auto2) {
+      if ((condition1 <= 18) & (condition1 <= 22)) {
+        return true;
+      } 
+      else {
+        return false;
+      }
+    } 
+    else {
+      if (condition2) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
 
+  const checkRelay = (auto1, auto2, condition1, condition2) => {
+    if ((auto1 == 1 && auto2)||auto2) {
+      if (condition1 > 90) {
+        return true;
+      } 
+      else if (condition1 < 60) {
+        return false;
+      }
+      else {
+        return true;
+      }
+    } 
+    else {
+      if (condition2) {
+        return true;
+      } else {
+        return false;
+      }
+    }
   }
   React.useEffect(() => {
     if (state.auto) {
@@ -73,8 +129,31 @@ function AppWeb() {
           "Content-type": "application/x-www-form-urlencoded",
         },
       });
-    }
-    else {
+      //relay
+      axios({
+        url: `https://api.thingspeak.com/update?api_key=${writeApiKeyRelay}&field1=0`,
+        method: "POST",
+        headers: {
+          "Content-type": "application/x-www-form-urlencoded",
+        },
+      });
+      //led
+      axios({
+        url: `https://api.thingspeak.com/update?api_key=${writeApiKeyLed}&field1=0`,
+        method: "POST",
+        headers: {
+          "Content-type": "application/x-www-form-urlencoded",
+        },
+      });
+      //buzzer
+      axios({
+        url: `https://api.thingspeak.com/update?api_key=${writeApiKeyBuzzer}&field1=0`,
+        method: "POST",
+        headers: {
+          "Content-type": "application/x-www-form-urlencoded",
+        },
+      });
+    } else {
       axios({
         url: `https://api.thingspeak.com/update?api_key=${writeApiKeyAuto}&field1=0`,
         method: "POST",
@@ -131,7 +210,7 @@ function AppWeb() {
           "Content-type": "application/x-www-form-urlencoded",
         },
       });
-      console.log('on');
+      console.log("on");
     } else {
       axios({
         url: `https://api.thingspeak.com/update?api_key=${writeApiKeyBuzzer}&field1=0`,
@@ -225,7 +304,6 @@ function AppWeb() {
         .catch((err) => console.log("error", err));
     }, 1000);
   }, [state.auto]);
-
 
   return (
     <div className="App">
@@ -342,11 +420,17 @@ function AppWeb() {
                 <div
                   style={{
                     //backgroundColor: state.relay ? "#ED6C02" : "#222527",
-                    backgroundColor: check(state.relay,relay,state.auto) ? "#ED6C02" : "#222527",
+                    backgroundColor: checkRelay(auto,state.auto, humidity, state.relay)
+                      ? "#ED6C02"
+                      : "#222527",
                     borderRadius: "50%",
                   }}
                 >
-                  <img width={80} height={80} src="https://img.icons8.com/color/96/000000/azure-relay-hybrid-connection.png" />
+                  <img
+                    width={80}
+                    height={80}
+                    src="https://img.icons8.com/color/96/000000/azure-relay-hybrid-connection.png"
+                  />
                 </div>
               </Box>
             </Grid>
@@ -365,7 +449,9 @@ function AppWeb() {
               >
                 <LightbulbIcon
                   //color={state.led ? "warning" : "disabled"}
-                  color={check(state.led,led,state.auto) ? "warning" : "disabled"}
+                  color={
+                    checkLed(auto, state.auto, hours, state.led) ? "warning" : "disabled"
+                  }
                   style={{ width: "80px", height: "80px" }}
                 />
               </Box>
@@ -385,7 +471,11 @@ function AppWeb() {
               >
                 <VolumeUpIcon
                   //color={state.buzzer ? "warning" : "disabled"}
-                  color={check(state.buzzer,buzzer,state.auto) ? "warning" : "disabled"}
+                  color={
+                    checkBuzzer(auto, state.auto, temperature, state.buzzer)
+                      ? "warning"
+                      : "disabled"
+                  }
                   style={{ width: "80px", height: "80px" }}
                 ></VolumeUpIcon>
               </Box>
@@ -432,7 +522,6 @@ function AppWeb() {
               >
                 <div
                   style={{
-                   
                     color: "white",
                     fontSize: "16px",
                     textTransform: "uppercase",
